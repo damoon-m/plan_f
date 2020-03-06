@@ -126,6 +126,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/mohamadi/plan_f_ws/build/gtest/cmake_install.cmake")
+  include("/home/mohamadi/plan_f_ws/build/my_dynamixel_tutorial/cmake_install.cmake")
 
 endif()
 

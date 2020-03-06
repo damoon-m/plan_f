@@ -2,4 +2,4 @@
 source_root_dir = "/home/mohamadi/plan_f_ws/src"
 whitelisted_packages = "".split(';') if "" != "" else []
 blacklisted_packages = "".split(';') if "" != "" else []
-underlay_workspaces = "/home/mohamadi/src_install_ws/devel;/opt/ros/kinetic".split(';') if "/home/mohamadi/src_install_ws/devel;/opt/ros/kinetic" != "" else []
+underlay_workspaces = "/home/mohamadi/plan_f_ws/devel;/opt/ros/kinetic".split(';') if "/home/mohamadi/plan_f_ws/devel;/opt/ros/kinetic" != "" else []
