@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/mohamadi/plan_f_ws/devel -DCMAKE_INSTALL_PREFIX=/home/mohamadi/plan_f_ws/install -G Unix Makefiles
