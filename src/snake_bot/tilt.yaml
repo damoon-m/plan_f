@@ -4,7 +4,7 @@ joint1_controller:
         module: joint_position_controller
         type: JointPositionController
     joint_name: Section1
-    joint_speed: 5.0
+    joint_speed: 1
     motor:
         id: 1
         init: 0
@@ -17,7 +17,7 @@ joint2_controller:
         module: joint_position_controller
         type: JointPositionController
     joint_name: Section2
-    joint_speed: 5.0
+    joint_speed: 1
     motor:
         id: 2
         init: 0
@@ -30,7 +30,7 @@ joint3_controller:
         module: joint_position_controller
         type: JointPositionController
     joint_name: Section3
-    joint_speed: 5.0
+    joint_speed: 1
     motor:
         id: 3
         init: 0
@@ -43,20 +43,20 @@ joint4_controller:
         module: joint_position_controller
         type: JointPositionController
     joint_name: Section4
-    joint_speed: 5.0
+    joint_speed: 1
     motor:
         id: 4
         init: 0
         min: 0
         max: 1023
 
-Sect5_controller:
+joint5_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
         type: JointPositionController
     joint_name: Section5
-    joint_speed: 5.0
+    joint_speed: 1
     motor:
         id: 5
         init: 0
@@ -69,9 +69,22 @@ joint6_controller:
         module: joint_position_controller
         type: JointPositionController
     joint_name: Section6
-    joint_speed: 5.0
+    joint_speed: 1
     motor:
         id: 6
+        init: 0
+        min: 0
+        max: 1023
+
+pan_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_torque_controller
+        type: JointTorqueController
+    joint_name: pan_joint
+    joint_speed: 1.17
+    motor:
+        id: 7
         init: 0
         min: 0
         max: 1023

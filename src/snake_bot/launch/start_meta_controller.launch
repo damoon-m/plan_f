@@ -10,6 +10,7 @@
 		joint4_controller
 		joint5_controller
 		joint6_controller
+		pan_controller
                 "
           output="screen"/>
           
@@ -25,6 +26,7 @@
 		joint4_controller
 		joint5_controller
 		joint6_controller
+		pan_controller
                "
           output="screen"/>
 </launch>
