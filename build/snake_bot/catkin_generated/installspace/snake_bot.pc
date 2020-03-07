@@ -1,0 +1,8 @@
+prefix=/home/mohamadi/plan_f_ws/install
+
+Name: snake_bot
+Description: Description of snake_bot
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

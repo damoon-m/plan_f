@@ -7,5 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export LD_LIBRARY_PATH="/home/mohamadi/plan_f_ws/devel/lib:$LD_LIBRARY_PATH"
 export PWD="/home/mohamadi/plan_f_ws/build"

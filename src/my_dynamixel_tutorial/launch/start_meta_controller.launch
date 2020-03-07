@@ -3,7 +3,7 @@
     <rosparam file="$(find my_dynamixel_tutorial)/tilt.yaml" command="load"/>
     <node name="controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
           args="--manager=dxl_manager
-                --port dxl_USB0
+                --port pan_tilt_port
                 joint3_controller                       
                 "
           output="screen"/>
