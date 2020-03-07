@@ -7,18 +7,13 @@ import numpy as np
 import pickle
 import sys, select, termios, tty
 from threading import Thread
-
+from time import sleep
 #from pos_publisher_functions import initialize, encoder_sub_cb, control,pos_publish, getKey
 
 pre_rec_poses=[]
 #pos_cmd_pub = rospy.Publisher('pos_cmd', Float32MultiArray, queue_size=10)
 move_pub=rospy.Publisher('move_cmd', Int16, queue_size=10)
-sect1_pub=rospy.Publisher('/Sect1_controller/command', Float64, queue_size=10)
-sect2_pub=rospy.Publisher('/Sect2_controller/command', Float64, queue_size=10)
-sect3_pub=rospy.Publisher('/Sect3_controller/command', Float64, queue_size=10)
-sect4_pub=rospy.Publisher('/Sect4_controller/command', Float64, queue_size=10)
-sect5_pub=rospy.Publisher('/Sect5_controller/command', Float64, queue_size=10)
-sect6_pub=rospy.Publisher('/Sect6_controller/command', Float64, queue_size=10)
+
 
 settings = termios.tcgetattr(sys.stdin)
 global base_loc
@@ -89,30 +84,38 @@ def pos_publish():
     global base_loc
     global SERVO_MAX
     global PI
+
+    sect1_pub=rospy.Publisher('/joint1_controller/command', Float64, queue_size=10)
+    sect2_pub=rospy.Publisher('/joint2_controller/command', Float64, queue_size=10)
+    sect3_pub=rospy.Publisher('/joint3_controller/command', Float64, queue_size=10)
+    sect4_pub=rospy.Publisher('/joint4_controller/command', Float64, queue_size=10)
+    sect5_pub=rospy.Publisher('/joint5_controller/command', Float64, queue_size=10)
+    sect6_pub=rospy.Publisher('/joint6_controller/command', Float64, queue_size=10)
+
     servo_cmd_msg=Float64()
     rate = rospy.Rate(5)
     while not rospy.is_shutdown():
-        int_base_loc=np.rint(base_loc)
+        int_base_loc=np.int(np.rint(base_loc))
         pos_servo=pre_rec_poses[int_base_loc][1]
         pos_servo=fmap(pos_servo,-PI, PI, -SERVO_MAX, SERVO_MAX)
 
         servo_cmd_msg.data=-1*pos_servo[0]
-        sect6_pub=rospy.Publisher('/Sect1_controller/command', Float64, queue_size=10)
-
+        sect1_pub.publish(servo_cmd_msg)
+        sleep(10)
         servo_cmd_msg.data=pos_servo[1]
-        sect6_pub=rospy.Publisher('/Sect2_controller/command', Float64, queue_size=10)
-
+        sect2_pub.publish(servo_cmd_msg)
+        sleep(10)
         servo_cmd_msg.data=-1*pos_servo[2]
-        sect6_pub=rospy.Publisher('/Sect3_controller/command', Float64, queue_size=10)
-
+        sect3_pub.publish(servo_cmd_msg)
+        sleep(10)
         servo_cmd_msg.data=pos_servo[3]
-        sect6_pub=rospy.Publisher('/Sect4_controller/command', Float64, queue_size=10)
-
+        sect4_pub.publish(servo_cmd_msg)
+        sleep(10)
         servo_cmd_msg.data=-1*pos_servo[4]
-        sect6_pub=rospy.Publisher('/Sect5_controller/command', Float64, queue_size=10)
-
+        sect5_pub.publish(servo_cmd_msg)
+        sleep(10)
         servo_cmd_msg.data=pos_servo[5]
-        sect6_pub=rospy.Publisher('/Sect6_controller/command', Float64, queue_size=10)
+        sect6_pub.publish(servo_cmd_msg)
 
         rate.sleep()
 
@@ -132,7 +135,7 @@ rospy.Subscriber('encoder_pos', Int64, encoder_sub_cb)
 
 if __name__ == '__main__':
     initialize()
-    #Thread(target=pos_publish).start()
+    Thread(target=pos_publish).start()
     try:
         control()
     except rospy.ROSInterruptException:

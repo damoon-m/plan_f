@@ -1,4 +1,4 @@
-Sect1_controller:
+joint1_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
@@ -11,7 +11,7 @@ Sect1_controller:
         min: 0
         max: 1023
 
-Sect2_controller:
+joint2_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
@@ -24,7 +24,7 @@ Sect2_controller:
         min: 0
         max: 1023
 
-Sect3_controller:
+joint3_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
@@ -37,7 +37,7 @@ Sect3_controller:
         min: 0
         max: 1023
 
-Sect4_controller:
+joint4_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
@@ -63,7 +63,7 @@ Sect5_controller:
         min: 0
         max: 1023
 
-Sect6_controller:
+joint6_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
