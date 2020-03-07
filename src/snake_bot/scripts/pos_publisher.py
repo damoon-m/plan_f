@@ -16,9 +16,10 @@ move_pub=rospy.Publisher('move_cmd', Int16, queue_size=10)
 
 
 settings = termios.tcgetattr(sys.stdin)
-global base_loc
+global pos_servo
+pos_servo=np.array([0,0,0, 0,0,0])
 global base_locs
-base_loc=-915
+int_base_loc=0
 global speed
 speed=150
 global SERVO_MAX
@@ -39,7 +40,7 @@ def initialize():
         base_locs=np.zeros(len(pre_rec_poses))
 
     for i in range(len(pre_rec_poses)):
-        base_locs[i]=pre_rec_poses[i][0]
+        base_locs[i]=pre_rec_poses[i][0]+915 #so it starts from 0
 
     rospy.loginfo("length %i lkdjf" % len(pre_rec_poses))
     rospy.loginfo(pre_rec_poses[0][0])
@@ -47,17 +48,21 @@ def initialize():
     rospy.loginfo(pre_rec_poses[0][1][5])
 
 def encoder_sub_cb(data):
-    global base_loc
+    global base_locs
+    global int_base_loc
+    global pos_servo
     tmp=data.data*1.1875-915
     base_loc=np.clip(tmp,np.min(base_locs), np.max(base_locs))
+    int_base_loc=np.int(np.rint(base_loc))
+    pos_servo=pre_rec_poses[int_base_loc][1]
+    pos_servo=fmap(pos_servo,-PI, PI, -SERVO_MAX, SERVO_MAX)
 
 def control():
-    global base_loc
     global speed
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         hello_str = "\n Time: %s \n Base Location: %.2f mm \n \
-        Move Speed: %i \n" % (rospy.get_time(), base_loc, speed)
+        Move Speed: %i \n" % (rospy.get_time(), int_base_loc, speed)
         rospy.loginfo(hello_str)
         key=getKey()
 
@@ -79,45 +84,78 @@ def control():
 
         rate.sleep()
 
-def pos_publish():
-    global base_locs
-    global base_loc
+def pos_publish1():
+    global pos_servo
     global SERVO_MAX
     global PI
-
     sect1_pub=rospy.Publisher('/joint1_controller/command', Float64, queue_size=10)
-    sect2_pub=rospy.Publisher('/joint2_controller/command', Float64, queue_size=10)
-    sect3_pub=rospy.Publisher('/joint3_controller/command', Float64, queue_size=10)
-    sect4_pub=rospy.Publisher('/joint4_controller/command', Float64, queue_size=10)
-    sect5_pub=rospy.Publisher('/joint5_controller/command', Float64, queue_size=10)
-    sect6_pub=rospy.Publisher('/joint6_controller/command', Float64, queue_size=10)
-
     servo_cmd_msg=Float64()
     rate = rospy.Rate(5)
     while not rospy.is_shutdown():
-        int_base_loc=np.int(np.rint(base_loc))
-        pos_servo=pre_rec_poses[int_base_loc][1]
-        pos_servo=fmap(pos_servo,-PI, PI, -SERVO_MAX, SERVO_MAX)
-
         servo_cmd_msg.data=-1*pos_servo[0]
         sect1_pub.publish(servo_cmd_msg)
-        sleep(10)
+        rate.sleep()
+
+def pos_publish2():
+    global pos_servo
+    global SERVO_MAX
+    global PI
+    sect2_pub=rospy.Publisher('/joint2_controller/command', Float64, queue_size=10)
+    servo_cmd_msg=Float64()
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
         servo_cmd_msg.data=pos_servo[1]
         sect2_pub.publish(servo_cmd_msg)
-        sleep(10)
+        rate.sleep()
+
+def pos_publish3():
+    global pos_servo
+    global SERVO_MAX
+    global PI
+    sect3_pub=rospy.Publisher('/joint3_controller/command', Float64, queue_size=10)
+    servo_cmd_msg=Float64()
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
         servo_cmd_msg.data=-1*pos_servo[2]
         sect3_pub.publish(servo_cmd_msg)
-        sleep(10)
+        rate.sleep()
+
+def pos_publish4():
+    global pos_servo
+    global SERVO_MAX
+    global PI
+    sect4_pub=rospy.Publisher('/joint4_controller/command', Float64, queue_size=10)
+    servo_cmd_msg=Float64()
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
         servo_cmd_msg.data=pos_servo[3]
         sect4_pub.publish(servo_cmd_msg)
-        sleep(10)
+        rate.sleep()
+
+def pos_publish5():
+    global pos_servo
+    global SERVO_MAX
+    global PI
+    sect5_pub=rospy.Publisher('/joint5_controller/command', Float64, queue_size=10)
+    servo_cmd_msg=Float64()
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
         servo_cmd_msg.data=-1*pos_servo[4]
         sect5_pub.publish(servo_cmd_msg)
-        sleep(10)
+        rate.sleep()
+
+def pos_publish6():
+    global pos_servo
+    global SERVO_MAX
+    global PI
+    sect6_pub=rospy.Publisher('/joint6_controller/command', Float64, queue_size=10)
+    servo_cmd_msg=Float64()
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
         servo_cmd_msg.data=pos_servo[5]
         sect6_pub.publish(servo_cmd_msg)
-
         rate.sleep()
+
 
 def fmap(x, x1, x2, y1, y2):
     return((x-x1)*(y2-y1)/(x2-x1)+y1)
@@ -135,7 +173,13 @@ rospy.Subscriber('encoder_pos', Int64, encoder_sub_cb)
 
 if __name__ == '__main__':
     initialize()
-    Thread(target=pos_publish).start()
+    Thread(target=pos_publish1).start()
+    Thread(target=pos_publish2).start()
+    Thread(target=pos_publish3).start()
+    Thread(target=pos_publish4).start()
+    Thread(target=pos_publish5).start()
+    Thread(target=pos_publish6).start()
+
     try:
         control()
     except rospy.ROSInterruptException:
