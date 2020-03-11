@@ -18,11 +18,11 @@ global base_locs
 global int_base_loc
 int_base_loc=0
 global speed
-speed=1
+speed=3.5
 global move_direction
 move_direction=1
 global SERVO_MAX
-SERVO_MAX= np.deg2rad(150)
+SERVO_MAX= np.deg2rad(160.5)
 global PI
 PI=np.deg2rad(180)
 #pre recorded base loacations
@@ -39,7 +39,7 @@ def initialize():
     rospy.Subscriber('encoder_pos', Int16, encoder_sub_cb)
     rate = rospy.Rate(20)
 
-    with open('/home/mohamadi/snake_bot_files/pre_rec_poses.pkl', 'rb') as infile:
+    with open('/home/mohamadi/snake_bot_files/Path3_3arcs_r110r150r110.pkl', 'rb') as infile:
         pre_rec_poses =pickle.load(infile)
         pre_rec_poses =pre_rec_poses[0]
         base_locs=np.zeros(len(pre_rec_poses))
@@ -53,11 +53,14 @@ def encoder_sub_cb(data):
     global pos_servo
     tmp=data.data*1.1875
     base_loc=np.clip(tmp,np.min(base_locs), np.max(base_locs))
-    #rospy.loginfo(base_loc)
     int_base_loc=np.int(np.rint(base_loc))
     pos_servo=pre_rec_poses[int_base_loc][1]
     pos_servo=fmap(pos_servo,-PI, PI, -SERVO_MAX, SERVO_MAX)
-    pos_servo=np.multiply(pos_servo,[1,-1, 1,-1, 1,-1])+np.deg2rad(150)
+    for i in range(5,0,-1):
+        pos_servo[i]=pos_servo[i]+np.sum(pos_servo[:i])
+    #pos_servo=np.zeros(6)
+    #rospy.loginfo(pos_servo)
+    pos_servo=np.multiply(pos_servo,[-1, 1,-1, 1,-1, 1])+np.deg2rad(150)
 
 def control():
     global speed
