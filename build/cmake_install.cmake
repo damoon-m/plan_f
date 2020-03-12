@@ -128,6 +128,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/mohamadi/plan_f_ws/build/gtest/cmake_install.cmake")
   include("/home/mohamadi/plan_f_ws/build/snake_bot/cmake_install.cmake")
   include("/home/mohamadi/plan_f_ws/build/my_dynamixel_tutorial/cmake_install.cmake")
+  include("/home/mohamadi/plan_f_ws/build/tf_bag/cmake_install.cmake")
 
 endif()
 

@@ -8,3 +8,4 @@
 
 # modified environment variables
 export PWD="/home/mohamadi/plan_f_ws/build"
+export PYTHONPATH="/home/mohamadi/plan_f_ws/devel/lib/python2.7/dist-packages:$PYTHONPATH"

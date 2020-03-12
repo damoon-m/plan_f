@@ -1,40 +1,5 @@
 #!/usr/bin/env python
-# Software License Agreement (BSD License)
-#
-# Copyright (c) 2008, Willow Garage, Inc.
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#
-# Revision $Id$
 
-## Simple talker demo that listens to std_msgs/Strings published
-## to the 'chatter' topic
 
 import rospy
 import rosbag
@@ -42,43 +7,60 @@ from tf_bag import BagTfTransformer
 from std_msgs.msg import String
 import numpy as np
 
+global tag_qty
+tag_qty=4
 
 def record():
 
     rospy.init_node('listener', anonymous=True)
 
-    bag_transformer = BagTfTransformer('/home/mohamadi/snake_bot_files/Testbag.bag')
+    bag_transformer = BagTfTransformer('/home/mohamadi/snake_bot_files/2020-03-11-21-24-15.bag')
 
-    times=bag_transformer.getTransformUpdateTimes('world', 'turtle2')
-    t=np.array([])
-    translations=[]
-    while True:
-        try:
-            tmp_time=next(times)
-            t=np.append(t,tmp_time.to_sec())
-            rospy.loginfo(t[-1])
-            translation=[]
+    rospy.loginfo(bag_transformer.getTransformFrameTuples())
 
-            for i in range(2):
-                target_frame='turtle'+str(i+1)
-                translation_i, quaternion = bag_transformer.lookupTransform('turtle1', target_frame ,tmp_time )
-                translation.append(translation_i)
+    rospy.loginfo('\n\n ########## \n')
 
-            translations.append(translation)
-        except StopIteration:
-            break
+    time_stamps=[tag_qty*[]]
+    translations=[tag_qty*[]]
 
-    t=t-t[0]
-    rospy.loginfo('last time is %.3f',t[-1])
-    rospy.loginfo('lenght of time is: %i ' , len(t))
+    rospy.loginfo(time_stamps)
+    for i in range(2,tag_qty*2+1,2):
+        rospy.loginfo('i = %i' %i)
 
-    #translations=np.array(translations)
-    for tt in translations[::10]:
-        #rospy.loginfo(bag_transformer.getTransformFrameTuples())
-        rospy.loginfo(tt)
-        #rospy.loginfo(translation)
+        target_frame='tag_'+str(i)
+        rospy.loginfo('Target frame, : %s \n' %target_frame )
 
-    np.save('/home/mohamadi/snake_bot_files/recorded_poses.npy', [t, [translations]], allow_pickle=True)
+        tmp_times=bag_transformer.getTransformUpdateTimes('camera', target_frame)
+        time_stamp_i=[]
+        translations_i=[]
+        while True:
+            try:
+                time_instant=next(tmp_times)
+                time_stamp_i.append(time_instant.to_sec())
+                rospy.loginfo(time_stamp_i[-1])
+
+                tmp_translation_i, quaternion = bag_transformer.lookupTransform('Table_Frame',\
+                 target_frame , time_instant)
+                translations_i.append(tmp_translation_i)
+
+
+            except StopIteration:
+                break
+
+        translations.append(translations_i)
+        time_stamp_i=np.array(time_stamp_i)
+        time_stamp_i=time_stamp_i-time_stamp_i[0]
+        time_stamps.append(time_stamp_i)
+        #rospy.loginfo('last time is %.3f',t[-1])
+        rospy.loginfo('lenght of time is: %i ' , len(time_stamp_i))
+
+        #translations=np.array(translations)
+        for tt in translations:
+            #rospy.loginfo(bag_transformer.getTransformFrameTuples())
+            rospy.loginfo(tt)
+            #rospy.loginfo(translation)
+
+    np.save('/home/mohamadi/snake_bot_files/recorded_posesnnn.npy', [time_stamps, [translations]], allow_pickle=True)
 
     rospy.loginfo('The data is saved.')
 

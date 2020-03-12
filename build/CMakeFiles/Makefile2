@@ -2269,6 +2269,24 @@ clean: my_dynamixel_tutorial/CMakeFiles/dynamixel_controllers_generate_messages_
 .PHONY : clean
 
 #=============================================================================
+# Directory level rules for directory tf_bag
+
+# Convenience name for "all" pass in the directory.
+tf_bag/all:
+
+.PHONY : tf_bag/all
+
+# Convenience name for "clean" pass in the directory.
+tf_bag/clean:
+
+.PHONY : tf_bag/clean
+
+# Convenience name for "preinstall" pass in the directory.
+tf_bag/preinstall:
+
+.PHONY : tf_bag/preinstall
+
+#=============================================================================
 # Special targets to cleanup operation of make.
 
 # Special rule to run CMake to check the build system integrity.
