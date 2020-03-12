@@ -1,0 +1,2 @@
+beginner_tutorials:snake_bot:tf_bag
+-DCATKIN_DEVEL_PREFIX=/home/mohamadi/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/mohamadi/catkin_ws/install -G Unix Makefiles

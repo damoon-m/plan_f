@@ -14,7 +14,7 @@ def record():
 
     rospy.init_node('listener', anonymous=True)
 
-    bag_transformer = BagTfTransformer('/home/mohamadi/snake_bot_files/2020-03-11-21-24-15.bag')
+    bag_transformer = BagTfTransformer('/home/mohamadi/plan_f_ws/src/snake_bot/snake_bot_files/2020-03-11-21-24-15.bag')
 
     rospy.loginfo(bag_transformer.getTransformFrameTuples())
 
@@ -60,7 +60,7 @@ def record():
             rospy.loginfo(tt)
             #rospy.loginfo(translation)
 
-    np.save('/home/mohamadi/snake_bot_files/recorded_posesnnn.npy', [time_stamps, [translations]], allow_pickle=True)
+    np.save('/home/mohamadi/plan_f_ws/src/snake_bot/snake_bot_files/recorded_posesnn.npy', [time_stamps, [translations]], allow_pickle=True)
 
     rospy.loginfo('The data is saved.')
 

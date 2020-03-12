@@ -1,0 +1,8 @@
+prefix=/home/mohamadi/catkin_ws/install
+
+Name: tf_bag
+Description: Description of tf_bag
+Version: 0.1.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
