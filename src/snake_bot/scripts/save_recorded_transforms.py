@@ -8,13 +8,15 @@ from std_msgs.msg import String
 import numpy as np
 
 global tag_qty
-tag_qty=4
+tag_qty=15
 
 def record():
-
+    filename = 'path4_take1/2020-03-13-15-34-33'
+    openaddress='/home/mohamadi/snake_bot_files/Recordings/%s.bag' %filename
+    saveaddress='/home/mohamadi/plan_f_ws/src/snake_bot/converted_recordings/%s.npy' %filename
     rospy.init_node('listener', anonymous=True)
 
-    bag_transformer = BagTfTransformer('/home/mohamadi/plan_f_ws/src/snake_bot/snake_bot_files/2020-03-11-21-24-15.bag')
+    bag_transformer = BagTfTransformer(openaddress)
 
     rospy.loginfo(bag_transformer.getTransformFrameTuples())
 
@@ -28,7 +30,7 @@ def record():
         rospy.loginfo('i = %i' %i)
 
         target_frame='tag_'+str(i)
-        rospy.loginfo('Target frame, : %s \n' %target_frame )
+        rospy.loginfo('Target frame, : %s ' %target_frame )
 
         tmp_times=bag_transformer.getTransformUpdateTimes('camera', target_frame)
         time_stamp_i=[]
@@ -37,7 +39,7 @@ def record():
             try:
                 time_instant=next(tmp_times)
                 time_stamp_i.append(time_instant.to_sec())
-                rospy.loginfo(time_stamp_i[-1])
+                #rospy.loginfo(time_stamp_i[-1])
 
                 tmp_translation_i, quaternion = bag_transformer.lookupTransform('Table_Frame',\
                  target_frame , time_instant)
@@ -52,15 +54,9 @@ def record():
         time_stamp_i=time_stamp_i-time_stamp_i[0]
         time_stamps.append(time_stamp_i)
         #rospy.loginfo('last time is %.3f',t[-1])
-        rospy.loginfo('lenght of time is: %i ' , len(time_stamp_i))
+        rospy.loginfo('lenght of time is: %i \n' , len(time_stamp_i))
 
-        #translations=np.array(translations)
-        for tt in translations:
-            #rospy.loginfo(bag_transformer.getTransformFrameTuples())
-            rospy.loginfo(tt)
-            #rospy.loginfo(translation)
-
-    np.save('/home/mohamadi/plan_f_ws/src/snake_bot/snake_bot_files/recorded_posesnn.npy', [time_stamps, [translations]], allow_pickle=True)
+    np.save(saveaddress, [time_stamps, [translations]], allow_pickle=True)
 
     rospy.loginfo('The data is saved.')
 

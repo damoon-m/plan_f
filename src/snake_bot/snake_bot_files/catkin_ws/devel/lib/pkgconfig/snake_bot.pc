@@ -1,8 +1,0 @@
-prefix=/home/mohamadi/catkin_ws/devel
-
-Name: snake_bot
-Description: Description of snake_bot
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

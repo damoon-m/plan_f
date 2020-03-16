@@ -25,6 +25,8 @@ global SERVO_MAX
 SERVO_MAX= np.deg2rad(160.5)
 global PI
 PI=np.deg2rad(180)
+global base_locs
+base_locs=np.array([])
 #pre recorded base loacations
 
 #move_pub=rospy.Publisher('move_cmd', Int16, queue_size=10)
@@ -39,7 +41,7 @@ def initialize():
     rospy.Subscriber('encoder_pos', Int16, encoder_sub_cb)
     rate = rospy.Rate(20)
 
-    with open('/home/mohamadi/snake_bot_files/Path3_3arcs_r110r150r110.pkl', 'rb') as infile:
+    with open('/home/mohamadi/plan_f_ws/src/snake_bot/snake_bot_files/Path4_r100r140d150r100.pkl', 'rb') as infile:
         pre_rec_poses =pickle.load(infile)
         pre_rec_poses =pre_rec_poses[0]
         base_locs=np.zeros(len(pre_rec_poses))
